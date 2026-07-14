@@ -8,6 +8,21 @@
 
 Ако искате да подкрепите истинската им работа, посетете направо [svobodnatochka.bg](https://svobodnatochka.bg/).
 
+## Снимки на екрана
+
+<table>
+  <tr>
+    <td><img src="screenshots/home-light.jpg" width="200" alt="Начален екран — светла тема"><br><sub>Начало (светла)</sub></td>
+    <td><img src="screenshots/home-dark.jpg" width="200" alt="Начален екран — тъмна тема"><br><sub>Начало (тъмна)</sub></td>
+    <td><img src="screenshots/article-dark.jpg" width="200" alt="Екран на статия"><br><sub>Статия</sub></td>
+  </tr>
+  <tr>
+    <td><img src="screenshots/saved-dark.jpg" width="200" alt="Запазени статии"><br><sub>Запазени</sub></td>
+    <td><img src="screenshots/settings-dark.jpg" width="200" alt="Настройки"><br><sub>Настройки</sub></td>
+    <td></td>
+  </tr>
+</table>
+
 ## Какво прави
 
 - **Начало** — хоризонтални рубрики. Първият таб ("Новини") е смесен поток от всички рубрики с водеща новина отгоре; останалите табове (Истории, Анализи, Разследвания, Три минути, Видео) показват съответната си рубрика.
