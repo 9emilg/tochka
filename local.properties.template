@@ -1,0 +1,5 @@
+## This file must NOT be checked into Version Control Systems.
+## Rename to local.properties and update the path below.
+
+# Path to your Android SDK installation
+sdk.dir=C\:\\Users\\YourUser\\AppData\\Local\\Android\\Sdk

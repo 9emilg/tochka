@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Точка</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Начало</string>
+    <string name="nav_saved">Запазени</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- Home -->
+    <string name="home_search_cd">Търсене</string>
+    <string name="home_live_label">На живо</string>
+    <string name="home_leading_story">Водеща новина</string>
+    <string name="home_error_generic">Нещо се обърка. Опитайте отново.</string>
+    <string name="home_no_connection">Няма връзка с интернет.</string>
+    <string name="action_retry">Опитай отново</string>
+
+    <!-- Article -->
+    <string name="article_back_cd">Назад</string>
+    <string name="article_share_cd">Сподели</string>
+    <string name="article_bookmark_add_cd">Запази статията</string>
+    <string name="article_bookmark_remove_cd">Премахни от запазените</string>
+    <string name="article_photo_credit">Снимка: архив на „Свободна точка“</string>
+    <string name="article_read_minutes">%1$d мин</string>
+    <string name="article_share_chooser_title">Сподели статия</string>
+
+    <!-- Saved -->
+    <string name="saved_title">Запазени</string>
+    <string name="saved_empty_title">Все още нямате запазени материали</string>
+    <string name="saved_empty_body">Докоснете иконата за отметка върху статия, за да я запазите за четене по-късно.</string>
+    <string name="saved_empty_cta">Разгледай новините</string>
+    <string name="saved_removed_snackbar">Статията беше премахната от запазените</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_section_appearance">Облик</string>
+    <string name="settings_theme_label">Тема</string>
+    <string name="settings_theme_light">Светла</string>
+    <string name="settings_theme_dark">Тъмна</string>
+    <string name="settings_theme_system">Системна</string>
+    <string name="settings_font_size_label">Размер на текста</string>
+    <string name="settings_font_size_small">Малък</string>
+    <string name="settings_font_size_medium">Среден</string>
+    <string name="settings_font_size_large">Голям</string>
+    <string name="settings_section_notifications">Известия</string>
+    <string name="settings_notif_breaking">Нови статии</string>
+    <string name="settings_notif_daily">Три минути</string>
+    <string name="notif_channel_articles_name">Нови статии</string>
+    <string name="notif_channel_articles_desc">Известие със заглавието на всяка нова статия (без рубриката „Три минути“)</string>
+    <string name="notif_channel_three_minutes_name">Три минути</string>
+    <string name="notif_channel_three_minutes_desc">Известие при нова публикация в „Три минути“</string>
+    <string name="settings_language_label">Език</string>
+    <string name="settings_language_value">Български</string>
+    <string name="settings_version">Точка · версия %1$s</string>
+    <string name="settings_legal_notice">© %1$d фондация „Свободна точка“. Всички права запазени.</string>
+    <string name="settings_section_about">За приложението</string>
+    <string name="settings_about_row">За приложението</string>
+
+    <!-- Search -->
+    <string name="search_hint">Търсене в Свободна точка</string>
+    <string name="search_empty">Няма намерени резултати</string>
+    <string name="search_prompt">Въведете дума или фраза за търсене</string>
+
+    <!-- First-launch disclaimer / About -->
+    <string name="disclaimer_title">Здравей!</string>
+    <string name="disclaimer_body">Здравей! Казвам се Емил Гигов и съм независим софтуерен разработчик. Това приложение не е официално и не е свързано със Свободна точка — то е доброволен проект, който показва тяхното съдържание в по-удобен за телефон вид.\n\nСвободна точка не носи отговорност за приложението. Ако искате да подкрепите независимата им журналистика, може да го направите на: svobodnatochka.bg\n\nС натискането на бутона „Разбрах“, потвърждавате, че разбирате произхода на приложението.\n\nБлагодаря ви!</string>
+    <string name="disclaimer_dismiss">Разбрах</string>
+    <string name="disclaimer_website">svobodnatochka.bg</string>
+</resources>
