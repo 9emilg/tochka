@@ -3,3 +3,13 @@
 
 # Path to your Android SDK installation
 sdk.dir=C\:\\Users\\YourUser\\AppData\\Local\\Android\\Sdk
+
+# Release signing (optional — only needed to build a release APK/AAB).
+# Generate a keystore with:
+#   keytool -genkeypair -v -keystore tochka-release.keystore -alias tochka -keyalg RSA -keysize 2048 -validity 10000
+# Keep the keystore file OUTSIDE the repo and back it up somewhere safe — losing it means
+# you can never again ship an update that installs over an existing install of this app.
+RELEASE_STORE_FILE=C\:\\path\\to\\tochka-release.keystore
+RELEASE_STORE_PASSWORD=changeme
+RELEASE_KEY_ALIAS=tochka
+RELEASE_KEY_PASSWORD=changeme
