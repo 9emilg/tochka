@@ -5,6 +5,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,7 @@ import bg.tochka.reader.ui.home.HomeScreen
 import bg.tochka.reader.ui.saved.SavedScreen
 import bg.tochka.reader.ui.search.SearchScreen
 import bg.tochka.reader.ui.settings.SettingsScreen
+import bg.tochka.reader.ui.update.UpdateViewModel
 
 private val topLevelRoutes = setOf(Destinations.HOME, Destinations.SAVED, Destinations.SETTINGS)
 
@@ -26,6 +28,8 @@ fun TochkaNavHost() {
     val navController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+    // Hoisted here (not per-screen) so Home's banner and Settings' manual-check share one state.
+    val updateViewModel: UpdateViewModel = hiltViewModel()
 
     Scaffold(
         bottomBar = {
@@ -52,6 +56,7 @@ fun TochkaNavHost() {
                 HomeScreen(
                     onArticleClick = { article -> navController.navigate(Destinations.article(article.id)) },
                     onSearchClick = { navController.navigate(Destinations.SEARCH) },
+                    updateViewModel = updateViewModel,
                 )
             }
             composable(Destinations.SAVED) {
@@ -66,7 +71,10 @@ fun TochkaNavHost() {
                 )
             }
             composable(Destinations.SETTINGS) {
-                SettingsScreen(onAboutClick = { navController.navigate(Destinations.ABOUT) })
+                SettingsScreen(
+                    onAboutClick = { navController.navigate(Destinations.ABOUT) },
+                    updateViewModel = updateViewModel,
+                )
             }
             composable(Destinations.SEARCH) {
                 SearchScreen(

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Matches Context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), where
+         UpdateInstaller downloads the release APK via DownloadManager. -->
+    <external-files-path name="downloads" path="Download/" />
+</paths>

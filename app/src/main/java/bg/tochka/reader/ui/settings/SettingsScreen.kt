@@ -45,13 +45,17 @@ import bg.tochka.reader.data.settings.FontSize
 import bg.tochka.reader.data.settings.ThemeMode
 import bg.tochka.reader.ui.components.SegmentedControl
 import bg.tochka.reader.ui.theme.tochkaScreenTitleStyle
+import bg.tochka.reader.ui.update.ManualCheckResult
+import bg.tochka.reader.ui.update.UpdateViewModel
 
 @Composable
 fun SettingsScreen(
     onAboutClick: () -> Unit,
+    updateViewModel: UpdateViewModel,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings = viewModel.settings.collectAsState().value ?: return
+    val updateUiState = updateViewModel.uiState.collectAsState().value
     val context = LocalContext.current
 
     var pendingEnable by remember { mutableStateOf<((Boolean) -> Unit)?>(null) }
@@ -147,6 +151,41 @@ fun SettingsScreen(
             checked = settings.threeMinutesNotifEnabled,
             onCheckedChange = { enable -> setNotifToggle(enable, viewModel::setThreeMinutesNotifEnabled) },
         )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+        SettingsToggleRow(
+            label = stringResource(R.string.settings_auto_update_toggle),
+            checked = settings.autoUpdateCheckEnabled,
+            onCheckedChange = updateViewModel::setAutoCheckEnabled,
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = updateViewModel::checkManually)
+                .padding(vertical = 15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.settings_check_update_row),
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            val resultText = when (updateUiState.manualCheckResult) {
+                ManualCheckResult.CHECKING -> stringResource(R.string.update_check_in_progress)
+                ManualCheckResult.UP_TO_DATE -> stringResource(R.string.update_check_up_to_date)
+                ManualCheckResult.UPDATE_FOUND -> stringResource(R.string.update_check_found)
+                ManualCheckResult.NONE -> null
+            }
+            if (resultText != null) {
+                Text(
+                    text = resultText,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
 
         Row(

@@ -43,15 +43,19 @@ import bg.tochka.reader.ui.components.ArticleListItem
 import bg.tochka.reader.ui.components.CategoryTabRow
 import bg.tochka.reader.ui.components.FeaturedArticleCard
 import bg.tochka.reader.ui.components.TabItem
+import bg.tochka.reader.ui.components.UpdateBanner
+import bg.tochka.reader.ui.update.UpdateViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onArticleClick: (Article) -> Unit,
     onSearchClick: () -> Unit,
+    updateViewModel: UpdateViewModel,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val updateUiState by updateViewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
 
     val shouldLoadMore by remember {
@@ -86,6 +90,15 @@ fun HomeScreen(
             IconButton(onClick = onSearchClick) {
                 Icon(Icons.Filled.Search, contentDescription = stringResource(R.string.home_search_cd))
             }
+        }
+
+        if (updateUiState.availableUpdate != null) {
+            UpdateBanner(
+                downloadState = updateUiState.downloadState,
+                onUpdateClick = updateViewModel::startUpdate,
+                onDismiss = updateViewModel::dismissBanner,
+                modifier = Modifier.padding(horizontal = 22.dp, vertical = 4.dp),
+            )
         }
 
         CategoryTabRow(

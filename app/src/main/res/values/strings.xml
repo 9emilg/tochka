@@ -55,6 +55,17 @@
     <string name="settings_legal_notice">© %1$d фондация „Свободна точка“. Всички права запазени.</string>
     <string name="settings_section_about">За приложението</string>
     <string name="settings_about_row">За приложението</string>
+    <string name="settings_check_update_row">Провери за актуализация</string>
+    <string name="settings_auto_update_toggle">Автоматична проверка за актуализации</string>
+    <string name="update_check_in_progress">Проверка…</string>
+    <string name="update_check_up_to_date">Няма налична актуализация</string>
+    <string name="update_check_found">Налична е нова версия</string>
+
+    <!-- Update banner -->
+    <string name="update_banner_title">Налична е нова версия</string>
+    <string name="update_banner_action">Актуализирай</string>
+    <string name="update_banner_dismiss_cd">Затвори</string>
+    <string name="update_downloading">Изтегляне…</string>
 
     <!-- Search -->
     <string name="search_hint">Търсене в Свободна точка</string>
