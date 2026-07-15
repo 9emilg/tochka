@@ -31,6 +31,7 @@
 - **Настройки** — тема Светла / Тъмна (истинско AMOLED черно) / Системна, множител за размер на текста (Малък / Среден / Голям), приложен навсякъде в приложението, и двата превключвателя за известия по-долу.
 - **Търсене** — просто търсене по ключова дума през собствения search endpoint на сайта.
 - **Известия** — фонова задача проверява сайта периодично и показва локално известие само със заглавието на новата статия. Два отделни превключвателя: общи нови статии (без "Три минути") и отделен превключвател за "Три минути", всеки на собствен notification channel. Няма акаунт, сървър или push услуга от какъвто и да е вид — това е клиентска проверка срещу същия публичен REST API.
+- **Актуализации** — приложението проверява [GitHub Releases](https://github.com/9emilg/tochka/releases) за нова версия (най-много веднъж на 24 часа), с ненатрапващо известие на началния екран и бутон за ръчна проверка в Настройки. Отделен превключвател спира автоматичната проверка изцяло.
 
 ## Източник на данни
 
@@ -56,7 +57,13 @@
 
 Изисквания: JDK 17+ (разработено с JDK 21) и Android SDK (compileSdk 34, build-tools 34.0.0).
 
-```
+Копирайте `local.properties.template` в `local.properties` и попълнете `sdk.dir` (и, ако компилирате release build, стойностите за подписване по-долу) преди компилиране.
+
+### Debug build
+
+За локално тестване и разработка:
+
+```bash
 # Windows
 gradlew.bat assembleDebug
 
@@ -64,9 +71,38 @@ gradlew.bat assembleDebug
 ./gradlew assembleDebug
 ```
 
-Debug APK-то се записва в `app/build/outputs/apk/debug/app-debug.apk`. Все още няма signing config за release build — добавете такъв (`app/build.gradle.kts`) преди публикуване другаде.
+Debug APK-то се записва в `app/build/outputs/apk/debug/app-debug.apk`.
 
-Копирайте `local.properties.template` в `local.properties` и посочете `sdk.dir` към вашата собствена инсталация на Android SDK преди компилиране.
+### Release build
+
+Приложението вече използва подписан release build — версиите, публикувани в [Releases](https://github.com/9emilg/tochka/releases), са подписани с частен keystore, който не е част от репото.
+
+За да компилирате release build локално, ви трябва собствен keystore — release build-ът очаква следните стойности в `local.properties`:
+
+```
+RELEASE_STORE_FILE=path/to/your.keystore
+RELEASE_STORE_PASSWORD=...
+RELEASE_KEY_ALIAS=...
+RELEASE_KEY_PASSWORD=...
+```
+
+Генерирайте собствен keystore за локално компилиране (APK-та, компилирани локално с ваш собствен keystore, ще имат различен подпис и Android няма да ги разпознае като актуализации на официално публикуваните версии):
+
+```bash
+keytool -genkey -v -keystore release.keystore -alias tochka -keyalg RSA -keysize 2048 -validity 10000
+```
+
+После:
+
+```bash
+# Windows
+gradlew.bat assembleRelease
+
+# macOS/Linux
+./gradlew assembleRelease
+```
+
+Release APK-то се записва в `app/build/outputs/apk/release/app-release.apk`. Ако стойностите за подписване липсват в `local.properties`, компилацията просто ще произведе неподписан release build, вместо да гръмне.
 
 ## Лиценз
 
