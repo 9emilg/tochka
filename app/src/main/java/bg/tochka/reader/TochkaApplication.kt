@@ -6,7 +6,9 @@ import android.app.NotificationManager
 import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import bg.tochka.reader.notifications.NotificationConstants
@@ -51,10 +53,15 @@ class TochkaApplication : Application(), Configuration.Provider {
     }
 
     private fun schedulePeriodicNotificationCheck() {
-        val request = PeriodicWorkRequestBuilder<NotificationWorker>(30, TimeUnit.MINUTES).build()
+        val request = PeriodicWorkRequestBuilder<NotificationWorker>(30, TimeUnit.MINUTES)
+            .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+            .build()
+        // UPDATE (not KEEP) so that changes to the work request — like the network constraint
+        // added here — actually reach devices that already had the job scheduled from an
+        // earlier app version, instead of being silently ignored forever.
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             NotificationConstants.PERIODIC_WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.UPDATE,
             request,
         )
     }

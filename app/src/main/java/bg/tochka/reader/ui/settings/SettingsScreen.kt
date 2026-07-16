@@ -1,8 +1,12 @@
 package bg.tochka.reader.ui.settings
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
+import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -17,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
@@ -26,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.hilt.navigation.compose.hiltViewModel
 import bg.tochka.reader.BuildConfig
 import bg.tochka.reader.R
@@ -77,6 +84,18 @@ fun SettingsScreen(
         } else {
             setter(enable)
         }
+    }
+
+    fun isIgnoringBatteryOptimizations(): Boolean {
+        val powerManager = context.getSystemService<PowerManager>() ?: return true
+        return powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    }
+
+    var showBatteryOptimizationRow by remember { mutableStateOf(!isIgnoringBatteryOptimizations()) }
+    val batteryOptimizationLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) {
+        showBatteryOptimizationRow = !isIgnoringBatteryOptimizations()
     }
 
     Column(
@@ -152,6 +171,43 @@ fun SettingsScreen(
             onCheckedChange = { enable -> setNotifToggle(enable, viewModel::setThreeMinutesNotifEnabled) },
         )
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+        if (showBatteryOptimizationRow) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 16.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(8.dp))
+                    .padding(14.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.settings_battery_optimization_title),
+                    style = MaterialTheme.typography.titleSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = stringResource(R.string.settings_battery_optimization_body),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+                TextButton(
+                    onClick = {
+                        val intent = Intent(
+                            Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                            Uri.parse("package:${context.packageName}"),
+                        )
+                        runCatching { batteryOptimizationLauncher.launch(intent) }
+                    },
+                    modifier = Modifier.padding(top = 4.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.settings_battery_optimization_action),
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+        }
 
         SettingsToggleRow(
             label = stringResource(R.string.settings_auto_update_toggle),

@@ -49,6 +49,12 @@
     <string name="notif_channel_articles_desc">Известие със заглавието на всяка нова статия (без рубриката „Три минути“)</string>
     <string name="notif_channel_three_minutes_name">Три минути</string>
     <string name="notif_channel_three_minutes_desc">Известие при нова публикация в „Три минути“</string>
+    <string name="notif_grouped_title_general">%1$d нови статии</string>
+    <string name="notif_grouped_title_three_minutes">%1$d нови в „Три минути“</string>
+    <string name="notif_grouped_more">+ още %1$d</string>
+    <string name="settings_battery_optimization_title">Известията спират в заден фон?</string>
+    <string name="settings_battery_optimization_body">Някои телефони ограничават приложения на заден фон, за да пестят батерия — това може да забави или спре известията. Изключете това ограничение за Точка, ако искате известията да пристигат навреме.</string>
+    <string name="settings_battery_optimization_action">Настройки за батерията</string>
     <string name="settings_language_label">Език</string>
     <string name="settings_language_value">Български</string>
     <string name="settings_version">Точка · версия %1$s</string>
