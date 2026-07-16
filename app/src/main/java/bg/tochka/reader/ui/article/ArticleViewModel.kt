@@ -71,7 +71,9 @@ class ArticleViewModel @Inject constructor(
                 // Read the local cache first so saved articles work fully offline.
                 val cached = savedArticleRepository.getById(id)
                 val article = cached ?: articleRepository.getPost(id)
-                _pageStates.update { it + (id to ArticleUiState(article = article, isSaved = savedIds.contains(id))) }
+                _pageStates.update {
+                    it + (id to ArticleUiState(article = article, isLoading = false, isSaved = savedIds.contains(id)))
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
