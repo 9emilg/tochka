@@ -25,6 +25,7 @@
     <string name="article_share_chooser_title">Сподели статия</string>
     <string name="article_nav_previous">Предишна</string>
     <string name="article_nav_next">Следваща</string>
+    <string name="article_youtube_play_cd">Пусни видеото</string>
 
     <!-- Saved -->
     <string name="saved_title">Запазени</string>

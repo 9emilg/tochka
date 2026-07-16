@@ -119,4 +119,9 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     implementation(libs.coil.compose)
+
+    implementation(libs.jsoup)
+    implementation(libs.androidx.browser)
+
+    testImplementation(libs.junit)
 }

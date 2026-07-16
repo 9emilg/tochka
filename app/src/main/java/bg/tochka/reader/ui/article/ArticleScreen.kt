@@ -33,6 +33,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,6 +46,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import bg.tochka.reader.R
 import bg.tochka.reader.ui.components.ArticleThumbnail
 import bg.tochka.reader.ui.components.CategoryKicker
+import bg.tochka.reader.ui.components.YouTubeEmbedCard
+import bg.tochka.reader.util.ContentSegment
+import bg.tochka.reader.util.parseArticleContent
 import kotlinx.coroutines.launch
 
 @Composable
@@ -186,13 +190,24 @@ private fun ArticlePageContent(
                         modifier = Modifier.padding(top = 6.dp, bottom = 20.dp),
                     )
                 }
-                ArticleWebView(
-                    html = article.contentHtml,
-                    textColor = textColor,
-                    linkColor = linkColor,
-                    bodyFontSizeSp = bodyFontSizePx,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
+                val segments = remember(article.contentHtml) { parseArticleContent(article.contentHtml) }
+                segments.forEach { segment ->
+                    when (segment) {
+                        is ContentSegment.Html -> ArticleWebView(
+                            html = segment.html,
+                            textColor = textColor,
+                            linkColor = linkColor,
+                            bodyFontSizeSp = bodyFontSizePx,
+                            modifier = Modifier.padding(bottom = 4.dp),
+                        )
+                        is ContentSegment.YouTube -> YouTubeEmbedCard(
+                            videoId = segment.videoId,
+                            caption = segment.caption,
+                            aspectRatio = segment.aspectRatio,
+                        )
+                    }
+                }
+                Spacer(Modifier.height(8.dp))
                 ArticleNavFooter(
                     previousTitle = previousTitle,
                     nextTitle = nextTitle,
