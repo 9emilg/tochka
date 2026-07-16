@@ -38,7 +38,7 @@ import bg.tochka.reader.util.formatSavedAt
 
 @Composable
 fun SavedScreen(
-    onArticleClick: (Article) -> Unit,
+    onArticleClick: (Article, List<Int>) -> Unit,
     onBrowseHome: () -> Unit,
     viewModel: SavedViewModel = hiltViewModel(),
 ) {
@@ -68,7 +68,7 @@ fun SavedScreen(
                     ArticleListItem(
                         article = article,
                         metaLine = article.savedAtMillis?.let { formatSavedAt(it) } ?: article.dateDisplay,
-                        onClick = { onArticleClick(article) },
+                        onClick = { onArticleClick(article, savedArticles.map { it.id }) },
                         isSaved = true,
                         onToggleSave = { viewModel.unsave(article) },
                     )

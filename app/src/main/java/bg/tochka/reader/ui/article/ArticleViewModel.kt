@@ -23,6 +23,11 @@ data class ArticleUiState(
     val error: Boolean = false,
 )
 
+/**
+ * Backs one Article screen instance, which may page through several articles (the list the user
+ * was browsing — a home feed tab, Saved, or search results) via a swipeable pager. Each article
+ * in [articleIds] gets its own lazily-loaded, independently cached [ArticleUiState].
+ */
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -30,38 +35,53 @@ class ArticleViewModel @Inject constructor(
     private val savedArticleRepository: SavedArticleRepository,
 ) : ViewModel() {
 
-    private val articleId: Int = checkNotNull(savedStateHandle[Destinations.ARTICLE_ID_ARG])
+    private val initialArticleId: Int = checkNotNull(savedStateHandle[Destinations.ARTICLE_ID_ARG])
 
-    private val _uiState = MutableStateFlow(ArticleUiState())
-    val uiState: StateFlow<ArticleUiState> = _uiState.asStateFlow()
+    val articleIds: List<Int> = savedStateHandle.get<String>(Destinations.ARTICLE_IDS_ARG)
+        ?.split(",")
+        ?.mapNotNull { it.toIntOrNull() }
+        ?.takeIf { it.isNotEmpty() }
+        ?: listOf(initialArticleId)
+
+    val initialIndex: Int = articleIds.indexOf(initialArticleId).coerceAtLeast(0)
+
+    private val _pageStates = MutableStateFlow<Map<Int, ArticleUiState>>(emptyMap())
+    val pageStates: StateFlow<Map<Int, ArticleUiState>> = _pageStates.asStateFlow()
+
+    private var savedIds: Set<Int> = emptySet()
 
     init {
         viewModelScope.launch {
             savedArticleRepository.observeSavedIds().collect { ids ->
-                _uiState.update { it.copy(isSaved = ids.contains(articleId)) }
+                savedIds = ids
+                _pageStates.update { pages ->
+                    pages.mapValues { (id, state) -> state.copy(isSaved = ids.contains(id)) }
+                }
             }
         }
-        load()
+        ensureLoaded(articleIds[initialIndex])
     }
 
-    private fun load() {
-        _uiState.update { it.copy(isLoading = true, error = false) }
+    /** Called when a page enters composition (current page, plus pager's preloaded neighbors). */
+    fun ensureLoaded(id: Int) {
+        if (_pageStates.value.containsKey(id)) return
+        _pageStates.update { it + (id to ArticleUiState(isLoading = true, isSaved = savedIds.contains(id))) }
         viewModelScope.launch {
             try {
                 // Read the local cache first so saved articles work fully offline.
-                val cached = savedArticleRepository.getById(articleId)
-                val article = cached ?: articleRepository.getPost(articleId)
-                _uiState.update { it.copy(isLoading = false, article = article) }
+                val cached = savedArticleRepository.getById(id)
+                val article = cached ?: articleRepository.getPost(id)
+                _pageStates.update { it + (id to ArticleUiState(article = article, isSaved = savedIds.contains(id))) }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _uiState.update { it.copy(isLoading = false, error = true) }
+                _pageStates.update { it + (id to ArticleUiState(isLoading = false, error = true, isSaved = savedIds.contains(id))) }
             }
         }
     }
 
-    fun toggleSave() {
-        val article = _uiState.value.article ?: return
+    fun toggleSave(id: Int) {
+        val article = _pageStates.value[id]?.article ?: return
         viewModelScope.launch { savedArticleRepository.toggle(article) }
     }
 }

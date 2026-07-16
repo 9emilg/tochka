@@ -54,14 +54,14 @@ fun TochkaNavHost() {
         ) {
             composable(Destinations.HOME) {
                 HomeScreen(
-                    onArticleClick = { article -> navController.navigate(Destinations.article(article.id)) },
+                    onArticleClick = { article, ids -> navController.navigate(Destinations.article(article.id, ids)) },
                     onSearchClick = { navController.navigate(Destinations.SEARCH) },
                     updateViewModel = updateViewModel,
                 )
             }
             composable(Destinations.SAVED) {
                 SavedScreen(
-                    onArticleClick = { article -> navController.navigate(Destinations.article(article.id)) },
+                    onArticleClick = { article, ids -> navController.navigate(Destinations.article(article.id, ids)) },
                     onBrowseHome = {
                         navController.navigate(Destinations.HOME) {
                             popUpTo(navController.graph.startDestinationId) { saveState = true }
@@ -79,7 +79,7 @@ fun TochkaNavHost() {
             composable(Destinations.SEARCH) {
                 SearchScreen(
                     onBack = { navController.popBackStack() },
-                    onArticleClick = { article -> navController.navigate(Destinations.article(article.id)) },
+                    onArticleClick = { article, ids -> navController.navigate(Destinations.article(article.id, ids)) },
                 )
             }
             composable(Destinations.ABOUT) {
@@ -87,7 +87,10 @@ fun TochkaNavHost() {
             }
             composable(
                 route = Destinations.ARTICLE,
-                arguments = listOf(navArgument(Destinations.ARTICLE_ID_ARG) { type = NavType.IntType }),
+                arguments = listOf(
+                    navArgument(Destinations.ARTICLE_ID_ARG) { type = NavType.IntType },
+                    navArgument(Destinations.ARTICLE_IDS_ARG) { type = NavType.StringType },
+                ),
             ) {
                 ArticleScreen(onBack = { navController.popBackStack() })
             }

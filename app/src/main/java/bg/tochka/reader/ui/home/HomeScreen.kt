@@ -49,7 +49,7 @@ import bg.tochka.reader.ui.update.UpdateViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onArticleClick: (Article) -> Unit,
+    onArticleClick: (Article, List<Int>) -> Unit,
     onSearchClick: () -> Unit,
     updateViewModel: UpdateViewModel,
     viewModel: HomeViewModel = hiltViewModel(),
@@ -135,7 +135,7 @@ fun HomeScreen(
                                 FeaturedArticleCard(
                                     article = article,
                                     metaLine = "${article.author} · ${article.dateDisplay}",
-                                    onClick = { onArticleClick(article) },
+                                    onClick = { onArticleClick(article, uiState.articles.map { it.id }) },
                                     kickerOverride = if (isAggregateFeed) {
                                         stringResource(R.string.home_leading_story)
                                     } else {
@@ -147,7 +147,7 @@ fun HomeScreen(
                                 ArticleListItem(
                                     article = article,
                                     metaLine = article.dateDisplay,
-                                    onClick = { onArticleClick(article) },
+                                    onClick = { onArticleClick(article, uiState.articles.map { it.id }) },
                                     isSaved = uiState.savedIds.contains(article.id),
                                     onToggleSave = { viewModel.toggleSave(article) },
                                 )

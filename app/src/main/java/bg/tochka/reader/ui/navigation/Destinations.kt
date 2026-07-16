@@ -6,8 +6,12 @@ object Destinations {
     const val SETTINGS = "settings"
     const val SEARCH = "search"
     const val ABOUT = "about"
-    const val ARTICLE = "article/{articleId}"
+    const val ARTICLE = "article/{articleId}/{articleIds}"
     const val ARTICLE_ID_ARG = "articleId"
+    const val ARTICLE_IDS_ARG = "articleIds"
 
-    fun article(articleId: Int): String = "article/$articleId"
+    /** [articleIds] is the ordered list the user was browsing (its own feed tab, Saved, or
+     * search results) — the article screen swipes within this exact list, in this exact order. */
+    fun article(articleId: Int, articleIds: List<Int>): String =
+        "article/$articleId/${articleIds.joinToString(",")}"
 }

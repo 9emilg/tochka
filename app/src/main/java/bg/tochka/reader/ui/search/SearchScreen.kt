@@ -34,7 +34,7 @@ import bg.tochka.reader.ui.components.ArticleListItem
 @Composable
 fun SearchScreen(
     onBack: () -> Unit,
-    onArticleClick: (Article) -> Unit,
+    onArticleClick: (Article, List<Int>) -> Unit,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -95,7 +95,7 @@ fun SearchScreen(
                         ArticleListItem(
                             article = article,
                             metaLine = article.dateDisplay,
-                            onClick = { onArticleClick(article) },
+                            onClick = { onArticleClick(article, uiState.results.map { it.id }) },
                             isSaved = uiState.savedIds.contains(article.id),
                             onToggleSave = { viewModel.toggleSave(article) },
                         )
